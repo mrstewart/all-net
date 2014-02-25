@@ -1,66 +1,6 @@
-class Team:
-	idNum = 0 	# Id of the team
-	name = ""	# name of the team
-	RPI = 0.0	# Rating percentage index of team
-	MV = 0.0	# Margin of victory of the team
-	WP = 0.0	# Winning percentage of the team
-	opponentList = [] # List of this team's opponents
-	pyth = 0.0	# Pythagoran expectation
-	gamesInTheRegularSeason = 0
-	def __init__(self, name, WP, MV, idNum):
-		self.name = name
-		self.idNum = idNum
-		self.WP = WP
-		self.MV = MV
-		self.opponentList = []
+from team import *
+from stats import *
 
-
-# Calculate the winning percentage for a team
-def calculateWinningPercentage(idNum, season):
-	# Calculate average points per game
-	# Calculate average games per season
-	# Calculate total games played
-	# Calculate total points for
-	# Calculate total points against
-	# Calculate total wins
-	# Calculate total losses
-
-	# Calcualte Win % Overall
-	# Calculate Win % Close games
-	# Calculate Opponent win % all games
-	# Calculate Opponent win % close games
-
-	# Get winning percentage for id by going through entire season
-	# and adding up wins and losses
-	WP = 0.0
-	
-	# Totals
-	gamesPlayed = 0.0
-	totalPointsFor = 0.0
-	totalPointsAgainst = 0.0
-	numberOfWins = 0.0
-	numberOfLosses = 0.0
-	numVictories = 0.0
-
-	# Averages
-	marginOfVictory = 0.0
-	pointsPerGame = 0.0
-	
-	
-	for entry in season:
-		winningTeamId = entry[2]
-		losingTeamId = entry[4]
-
-		if idNum == winningTeamId: 
-			numberOfWins += 1.0
-			numVictories += 1
-			marginOfVictory = entry[3] - entry[5]
-			numberOfWins += 1.0
-		if idNum == losingTeamId: numberOfLosses += 1.0
-	
-	if (numberOfWins + numberOfLosses) != 0: WP = numberOfWins / (numberOfWins + numberOfLosses)
-	else: WP = 0
-	return [WP, marginOfVictory]
 
 # Parse out the regular season csv file, cast attributes appropriately so that later
 # when we are creating indices, these don't have to get cast for every calculation
@@ -113,49 +53,27 @@ def generateOpponentList(season, teams):
 		teams[winningTeamId].opponentList.append(losingTeamId)
 		teams[losingTeamId].opponentList.append(winningTeamId)
 
-# Calculate RPI for each team
-def calculateRPI(teams):
-	for team in teams.keys():
-		# Calculate OWP
-		OWP = 0.0
-		OOWP = 0.0
-		OLen = len(teams[team].opponentList)
-		OOLen = 0
-		
-		# Start summation for OWP and OOWP
-		for opponent in teams[team].opponentList:
-			OWP += teams[opponent].WP
-			OOLen += len(teams[opponent].opponentList)
-			for opponentOpponent in teams[opponent].opponentList:
-				OOWP += teams[opponent].WP
-	
-		# Return something only if the team had opponents
-		if OLen != 0:
-			teams[team].RPI += 0.5 * (OWP / OLen)
-			teams[team].RPI += 0.25 * (OOWP / OOLen)
-			teams[team].RPI += 0.25 * teams[team].WP
-		
-		# Else return "NA"		
-		else:			
-			teams[team].RPI = "NA" 
 
 # Create the teams dictionary, iniitally has the winning percentage
 def populateTeams(teams_file, seasons):
 	teams = {}
 	for team in teams_file:
 		teamId = int(team[0])
-		WPMV = calculateWinningPercentage(teamId, seasons)
-		newTeam = Team(team[1], WPMV[0], WPMV[1], teamId)
-		teams[teamId] = newTeam
+		teamName = team[1]
+		teams[teamId] = Team(teamName, teamId)
 	return teams
 
 def main():
+	# Should we calculate per season \ team or just per team?
+	# The former would give us ~2600 virtual teams
 	regular_season_results = parse_season_csv("data/regular_season_results.csv");
 	teams_file = parse_team_csv("data/teams.csv")
 
 	teams = populateTeams(teams_file, regular_season_results)
 
 	generateOpponentList(regular_season_results, teams)
+
+	calculateTeamStatistics(teams, regular_season_results)
 
 	calculateRPI(teams)
 
