@@ -1,3 +1,6 @@
+import pickle 
+import os
+
 from team import *
 from stats import *
 
@@ -64,17 +67,25 @@ def populateTeams(teams_file, seasons):
 	return teams
 
 def main():
-	# Should we calculate per season \ team or just per team?
-	# The former would give us ~2600 virtual teams
-	regular_season_results = parse_season_csv("data/regular_season_results.csv");
-	teams_file = parse_team_csv("data/teams.csv")
+	if os.path.exists("teams.p"):
+		teams = pickle.load( open( "teams.p", "rb" ) )
+		print "Total number of teams : ",len(teams)
+	else:
+		print "Pre-baked stats not found, baking... "
+		# Should we calculate per season \ team or just per team?
+		# The former would give us ~2600 virtual teams
+		regular_season_results = parse_season_csv("data/regular_season_results.csv");
+		teams_file = parse_team_csv("data/teams.csv")
 
-	teams = populateTeams(teams_file, regular_season_results)
+		teams = populateTeams(teams_file, regular_season_results)
 
-	generateOpponentList(regular_season_results, teams)
+		generateOpponentList(regular_season_results, teams)
 
-	calculateTeamStatistics(teams, regular_season_results)
+		calculateTeamStatistics(teams, regular_season_results)
 
-	calculateRPI(teams)
+		calculateRPI(teams)
 
+		print "Storing as teams.p... "
+
+		pickle.dump(teams, open( "teams.p", "wb" ) )
 main()
