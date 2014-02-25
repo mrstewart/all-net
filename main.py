@@ -1,6 +1,6 @@
 import pickle 
 import os
-
+import matplotlib.pyplot as plt
 from team import *
 from stats import *
 
@@ -70,6 +70,17 @@ def main():
 	if os.path.exists("teams.p"):
 		teams = pickle.load( open( "teams.p", "rb" ) )
 		print "Total number of teams : ",len(teams)
+
+		# For example, RPI v. MV
+		RPIs = []
+		MVs = []
+		for team in teams.keys():
+			if teams[team].ratingPercentageIndex != "NA":
+				RPIs.append(teams[team].ratingPercentageIndex)
+				MVs.append(teams[team].winningPercentage)
+		plt.plot(RPIs, MVs, 'ro')
+		plt.axis([0, 1, 0, 1])
+		plt.show()
 	else:
 		print "Pre-baked stats not found, baking... "
 		# Should we calculate per season \ team or just per team?
@@ -82,6 +93,8 @@ def main():
 		generateOpponentList(regular_season_results, teams)
 
 		calculateTeamStatistics(teams, regular_season_results)
+		
+		calculateSimpleDerivativeStatistics(teams)
 
 		calculateRPI(teams)
 
