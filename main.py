@@ -5,6 +5,7 @@ class Team:
 	MV = 0.0	# Margin of victory of the team
 	WP = 0.0	# Winning percentage of the team
 	opponentList = [] # List of this team's opponents
+	pyth = 0.0	# Pythagoran expectation
 	gamesInTheRegularSeason = 0
 	def __init__(self, name, WP, MV, idNum):
 		self.name = name
@@ -13,16 +14,39 @@ class Team:
 		self.MV = MV
 		self.opponentList = []
 
+
 # Calculate the winning percentage for a team
 def calculateWinningPercentage(idNum, season):
+	# Calculate average points per game
+	# Calculate average games per season
+	# Calculate total games played
+	# Calculate total points for
+	# Calculate total points against
+	# Calculate total wins
+	# Calculate total losses
+
+	# Calcualte Win % Overall
+	# Calculate Win % Close games
+	# Calculate Opponent win % all games
+	# Calculate Opponent win % close games
 
 	# Get winning percentage for id by going through entire season
 	# and adding up wins and losses
 	WP = 0.0
+	
+	# Totals
+	gamesPlayed = 0.0
+	totalPointsFor = 0.0
+	totalPointsAgainst = 0.0
 	numberOfWins = 0.0
 	numberOfLosses = 0.0
+	numVictories = 0.0
+
+	# Averages
 	marginOfVictory = 0.0
-	numVictories = 0
+	pointsPerGame = 0.0
+	
+	
 	for entry in season:
 		winningTeamId = entry[2]
 		losingTeamId = entry[4]
