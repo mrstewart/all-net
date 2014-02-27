@@ -13,6 +13,7 @@ objects
 """
 import os
 import pickle
+import inspect
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
@@ -52,6 +53,12 @@ def testDiscretization(n, bins):
 RPI_BINS = 30
 WP_BINS = 30
 PYTH_BINS = 30
+CG_BINS = 30
+TPF_BINS = 30
+TPA_BINS = 30
+NV_BINS = 30
+NL_BINS = 30
+AVGMV_BINS = 30
 TESTING_BINS = True
 
 if os.path.exists("teams.p"):
@@ -68,9 +75,33 @@ if os.path.exists("teams.p"):
 	for team in teams.keys():
 		pyth_data.append(teams[team].pythagoreanExpectation)
 
+	cg_data = []
+	for team in teams.keys():
+		cg_data.append(teams[team].closeWonGames)
+
+	tpf_data = []
+	for team in teams.keys():
+		tpf_data.append(teams[team].totalPointsFor)
+
+	tpa_data = []
+	for team in teams.keys():
+		tpa_data.append(teams[team].totalPointsAgainst)
+
+	nv_data = []
+	for team in teams.keys():
+		nv_data.append(teams[team].numVictories)
+	
+	nl_data = []
+	for team in teams.keys():
+		nl_data.append(teams[team].numberOfLosses)
+
+	avgMV_data = []
+	for team in teams.keys():
+		avgMV_data.append(teams[team].averageMarginOfVictory)
+
 	# histogram our data with numpy
 	rpi_frequency, rpi_bins = discretize(rpi_data, RPI_BINS)
-	if TESTING_BINS: testDiscretization(rpi_frequency, rpi_bins)
+	#if TESTING_BINS: testDiscretization(rpi_frequency, rpi_bins)
 
 	# histogram our data with numpy
 	wp_frequency, wp_bins = discretize(wp_data, WP_BINS)
@@ -79,6 +110,30 @@ if os.path.exists("teams.p"):
 	# histogram our data with numpy
 	pyth_frequency, pyth_bins = discretize(pyth_data, PYTH_BINS)
 	#if TESTING_BINS: testDiscretization(pyth_frequency, pyth_bins)
+
+	# histogram our data with numpy
+	cg_frequency, cg_bins = discretize(cg_data, CG_BINS)
+	#if TESTING_BINS: testDiscretization(cg_frequency, cg_bins)
+
+	# histogram our data with numpy
+	tpf_frequency, tpf_bins = discretize(tpf_data, TPF_BINS)
+	#if TESTING_BINS: testDiscretization(tpf_frequency, tpf_bins)
+
+	# histogram our data with numpy
+	tpa_frequency, tpa_bins = discretize(tpa_data, TPA_BINS)
+	#if TESTING_BINS: testDiscretization(tpa_frequency, tpa_bins)
+
+	# histogram our data with numpy
+	nv_frequency, nv_bins = discretize(nv_data, NV_BINS)
+	#if TESTING_BINS: testDiscretization(nv_frequency, nv_bins)	
+
+	# histogram our data with numpy
+	nl_frequency, nl_bins = discretize(nl_data, NL_BINS)
+	#if TESTING_BINS: testDiscretization(nl_frequency, nl_bins)
+
+	# histogram our data with numpy
+	avgMV_frequency, avgMV_bins = discretize(avgMV_data, AVGMV_BINS)
+	if TESTING_BINS: testDiscretization(avgMV_frequency, avgMV_bins)
 
 	# Convert rating percentage index for each team to an ordinal value
 	for team in teams.keys():
@@ -93,6 +148,6 @@ if os.path.exists("teams.p"):
 			
 			if teams[team].winningPercentage >= wp_bins[i] and teams[team].winningPercentage < wp_bins[i + 1]:
 				teams[team].winningPercentage = i
-				break
+
 
 	
