@@ -11,6 +11,7 @@ example makes a histogram -- its more work to set up the vertex arrays
 at the outset, but it should be much faster for large numbers of
 objects
 """
+import sys
 import os
 import pickle
 import inspect
@@ -61,8 +62,21 @@ NL_BINS = 30
 AVGMV_BINS = 30
 TESTING_BINS = True
 
-if os.path.exists("teams.p"):
-	teams = pickle.load( open( "teams.p", "rb" ) )
+EXPORT_WITH_HEADINGS = True
+EXPORT_ID = False
+EXPORT_NAME = False
+EXPORT_RPI = True
+EXPORT_WP = True
+EXPORT_PYTH = True
+EXPORT_CWG = True
+EXPORT_TPF = True
+EXPORT_TPA = True
+EXPORT_NV = True
+EXPORT_NL = True
+EXPORT_AVGMV = True
+
+if os.path.exists("data/teams.p"):
+	teams = pickle.load( open( "data/teams.p", "rb" ) )
 
 	nl_data = []
 	avgMV_data = []
@@ -123,86 +137,166 @@ if os.path.exists("teams.p"):
 	#if TESTING_BINS: testDiscretization(avgMV_frequency, avgMV_bins)
 
 
-	f = open('team_vectors.csv', 'w')
+	f = open('data/team_vectors.csv', 'w')
+	HEADER = []
+	
+	if EXPORT_ID: HEADER.append('id')
+	if EXPORT_NAME: HEADER.append('name')
+	if EXPORT_RPI: HEADER.append('rpi')
+	if EXPORT_WP: HEADER.append('wp')
+	if EXPORT_PYTH: HEADER.append('pyth')
+	if EXPORT_CWG: HEADER.append('cwg')
+	if EXPORT_TPF: HEADER.append('tpf')
+	if EXPORT_TPA: HEADER.append('tpa')
+	if EXPORT_NV: HEADER.append('nv')
+	if EXPORT_NL: HEADER.append('nl')
+	if EXPORT_AVGMV: HEADER.append('avgmv')	
+	
+	HEADER_COMPLETE = ""
+	for i in range(len(HEADER)):
+		if i != len(HEADER) - 1:
+			HEADER_COMPLETE = HEADER_COMPLETE + HEADER[i] + ','
+		else:
+			HEADER_COMPLETE = HEADER_COMPLETE + HEADER[i] + '\n'
+	if HEADER != []: f.write(HEADER_COMPLETE)
 	# Convert winning percentage for each team to an ordinal value
 	# write team vector to file
 	for team in teams.keys():
 		entry = ""
-		entry += str(teams[team].idNum)+','
-		entry += teams[team].name+','
+		
 		# Go through each bin and figure out what this team's value for this attribute
 		# falls in - use the bin's 0-indexed number as the discretized number
-		for i in range(len(rpi_bins) - 1):
-			if teams[team].ratingPercentageIndex >= rpi_bins[i] and teams[team].ratingPercentageIndex < rpi_bins[i + 1]:
-				teams[team].ratingPercentageIndex = i
-				entry += str(teams[team].ratingPercentageIndex)+','
-				break
+		if EXPORT_RPI:		
+			for i in range(len(rpi_bins) - 1):
+				if i < len(rpi_bins) - 2:
+					if teams[team].ratingPercentageIndex >= rpi_bins[i] and teams[team].ratingPercentageIndex < rpi_bins[i + 1]:
+						teams[team].ratingPercentageIndex = i
+						entry += str(teams[team].ratingPercentageIndex)+','
+						break
+				else:
+					teams[team].ratingPercentageIndex = i
+					entry += str(teams[team].ratingPercentageIndex)+','
+					break
+				
 
 		# Go through each bin and figure out what this team's value for this attribute
 		# falls in - use the bin's 0-indexed number as the discretized number
-		for i in range(len(wp_bins) - 1):
-			
-			if teams[team].winningPercentage >= wp_bins[i] and teams[team].winningPercentage < wp_bins[i + 1]:
-				teams[team].winningPercentage = i
-				entry += str(teams[team].winningPercentage)+','
-				break
-
+		if EXPORT_WP:
+			for i in range(len(wp_bins) - 1):
+				if i < len(wp_bins) - 2:
+					if teams[team].winningPercentage >= wp_bins[i] and teams[team].winningPercentage < wp_bins[i + 1]:
+						teams[team].winningPercentage = i
+						entry += str(teams[team].winningPercentage)+','
+						break
+				else:
+					teams[team].winningPercentage = i
+					entry += str(teams[team].winningPercentage)+','
+					break
+				
 		# Go through each bin and figure out what this team's value for this attribute
 		# falls in - use the bin's 0-indexed number as the discretized number
-		for i in range(len(pyth_bins) - 1):
-			if teams[team].pythagoreanExpectation >= pyth_bins[i] and teams[team].pythagoreanExpectation < pyth_bins[i + 1]:
-				teams[team].pythagoreanExpectation = i
-				entry += str(teams[team].pythagoreanExpectation)+','
-				break
+		if EXPORT_PYTH:		
+			for i in range(len(pyth_bins) - 1):
+				if i < len(pyth_bins) - 2:
+					if teams[team].pythagoreanExpectation >= pyth_bins[i] and teams[team].pythagoreanExpectation < pyth_bins[i + 1]:
+						teams[team].pythagoreanExpectation = i
+						entry += str(teams[team].pythagoreanExpectation)+','
+						break
+				else:
+					teams[team].pythagoreanExpectation = i
+					entry += str(teams[team].pythagoreanExpectation)+','
+					break
+				
 	
 		# Go through each bin and figure out what this team's value for this attribute
 		# falls in - use the bin's 0-indexed number as the discretized number
-		for i in range(len(cg_bins) - 1):
-			if teams[team].closeWonGames >= cg_bins[i] and teams[team].closeWonGames < cg_bins[i + 1]:
-				teams[team].closeWonGames = i
-				entry += str(teams[team].closeWonGames)+','
-				break
+		if EXPORT_CWG:		
+			for i in range(len(cg_bins) - 1):
+				if i < len(cg_bins) - 2:
+					if teams[team].closeWonGames >= cg_bins[i] and teams[team].closeWonGames < cg_bins[i + 1]:
+						teams[team].closeWonGames = i
+						entry += str(teams[team].closeWonGames)+','
+						break
+				else:
+					teams[team].closeWonGames = i
+					entry += str(teams[team].closeWonGames)+','
+					break
+				
 
 		# Go through each bin and figure out what this team's value for this attribute
 		# falls in - use the bin's 0-indexed number as the discretized number
-		for i in range(len(tpf_bins) - 1):
-			if teams[team].totalPointsFor >= tpf_bins[i] and teams[team].totalPointsFor < tpf_bins[i + 1]:
-				teams[team].totalPointsFor = i
-				entry += str(teams[team].totalPointsFor)+','
-				break
+		if EXPORT_TPF:		
+			for i in range(len(tpf_bins) - 1):
+				if i < len(tpf_bins) - 2:
+					if teams[team].totalPointsFor >= tpf_bins[i] and teams[team].totalPointsFor < tpf_bins[i + 1]:
+						teams[team].totalPointsFor = i
+						entry += str(teams[team].totalPointsFor)+','
+						break
+				else:
+					teams[team].totalPointsFor = i
+					entry += str(teams[team].totalPointsFor)+','
+					break
+				
 
 		# Go through each bin and figure out what this team's value for this attribute
 		# falls in - use the bin's 0-indexed number as the discretized number
-		for i in range(len(tpa_bins) - 1):
-			if teams[team].totalPointsAgainst >= tpa_bins[i] and teams[team].totalPointsAgainst < tpa_bins[i + 1]:
-				teams[team].totalPointsAgainst = i
-				entry += str(teams[team].totalPointsAgainst)+','
-				break
+		if EXPORT_TPA:		
+			for i in range(len(tpa_bins) - 1):
+				if i < len(tpa_bins) - 2:
+					if teams[team].totalPointsAgainst >= tpa_bins[i] and teams[team].totalPointsAgainst < tpa_bins[i + 1]:
+						teams[team].totalPointsAgainst = i
+						entry += str(teams[team].totalPointsAgainst)+','
+						break
+				else:
+					teams[team].totalPointsAgainst = i
+					entry += str(teams[team].totalPointsAgainst)+','
+					break
+				
 
 		# Go through each bin and figure out what this team's value for this attribute
 		# falls in - use the bin's 0-indexed number as the discretized number
-		for i in range(len(nv_bins) - 1):
-			if teams[team].numVictories >= nv_bins[i] and teams[team].numVictories < nv_bins[i + 1]:
-				teams[team].numVictories = i
-				entry += str(teams[team].numVictories)+','
-				break
+		if EXPORT_NV:		
+			for i in range(len(nv_bins) - 1):
+				if i < len(nv_bins) - 2:
+					if teams[team].numVictories >= nv_bins[i] and teams[team].numVictories < nv_bins[i + 1]:			
+						teams[team].numVictories = i
+						entry += str(teams[team].numVictories)+','
+						break
+				else:
+					teams[team].numVictories = i
+					entry += str(teams[team].numVictories)+','
+					break
 
 		
 		# Go through each bin and figure out what this team's value for this attribute
 		# falls in - use the bin's 0-indexed number as the discretized number
-		for i in range(len(nl_bins) - 1):
-			if teams[team].numberOfLosses >= nl_bins[i] and teams[team].numberOfLosses < nl_bins[i + 1]:
-				teams[team].numberOfLosses = i
-				entry += str(teams[team].numberOfLosses)+','
-				break
+		if EXPORT_NL:
+			for i in range(len(nl_bins) - 1):
+				if i < len(nl_bins) - 2:
+					if teams[team].numberOfLosses >= nl_bins[i] and teams[team].numberOfLosses < nl_bins[i + 1]:
+						teams[team].numberOfLosses = i
+						entry += str(teams[team].numberOfLosses)+','
+						break
+				else:
+					teams[team].numberOfLosses = i
+					entry += str(teams[team].numberOfLosses)+','
+					break
 
 		# Go through each bin and figure out what this team's value for this attribute
 		# falls in - use the bin's 0-indexed number as the discretized number
-		for i in range(len(avgMV_bins) - 1):
-			if teams[team].averageMarginOfVictory >= avgMV_bins[i] and teams[team].averageMarginOfVictory < avgMV_bins[i + 1]:
-				teams[team].averageMarginOfVictory = i
-				entry += str(teams[team].averageMarginOfVictory)+'\n'
-				break
+		if EXPORT_AVGMV:		
+			for i in range(len(avgMV_bins) - 1):
+				if i < len(nl_bins) - 2:
+					if teams[team].averageMarginOfVictory >= avgMV_bins[i] and teams[team].averageMarginOfVictory < avgMV_bins[i + 1]:
+				
+						teams[team].averageMarginOfVictory = i
+						entry += str(teams[team].averageMarginOfVictory)+'\n'
+						break
+				else:
+					teams[team].averageMarginOfVictory = i
+					entry += str(teams[team].averageMarginOfVictory)+'\n'
+					break
+				
 		
 	
 		f.write(entry)

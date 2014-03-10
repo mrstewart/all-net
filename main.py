@@ -71,12 +71,12 @@ def populateTeams(teams_file, seasons):
 	return teams
 
 def main():
-	if os.path.exists("teams.p"):
-		teams = pickle.load( open( "teams.p", "rb" ) )
+	if os.path.exists("data/teams.p"):
+		teams = pickle.load( open( "data/teams.p", "rb" ) )
 		print "Total number of teams : ",len(teams)
 
-		if not os.path.exists("team_aggregate.csv"):
-			f = open('team_aggregate.csv', 'w')
+		if not os.path.exists("data/team_aggregate.csv"):
+			f = open('data/team_aggregate.csv', 'w')
 		
 			for team in teams.keys(): 
 				if team in IGNORE_TEAMS: continue
@@ -131,5 +131,5 @@ def main():
 
 		print "Storing as teams.p... "
 
-		pickle.dump(teams, open( "teams.p", "wb" ) )
+		pickle.dump(teams, open( "data/teams.p", "wb" ) )
 main()
