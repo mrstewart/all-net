@@ -1,0 +1,22 @@
+\BOOKMARK [1][-]{section.1}{Bayesian Networks Literature Review}{}% 1
+\BOOKMARK [1][-]{section.2}{Data Preprocessing}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{Data Cleaning}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{Stratified Sampling}{section.2}% 4
+\BOOKMARK [2][-]{subsection.2.3}{Aggregation \134Feature Creation}{section.2}% 5
+\BOOKMARK [3][-]{subsubsection.2.3.1}{Rating Percentage Index \(RPI\)}{subsection.2.3}% 6
+\BOOKMARK [3][-]{subsubsection.2.3.2}{Average Margin of Victory}{subsection.2.3}% 7
+\BOOKMARK [3][-]{subsubsection.2.3.3}{Pythagorean Expectation}{subsection.2.3}% 8
+\BOOKMARK [3][-]{subsubsection.2.3.4}{Close Won Games}{subsection.2.3}% 9
+\BOOKMARK [1][-]{section.3}{Structure of Training \134Test Sets}{}% 10
+\BOOKMARK [2][-]{subsection.3.1}{Hight Level Structure of Training and Test Sets}{section.3}% 11
+\BOOKMARK [2][-]{subsection.3.2}{Use of Stratified Sampling}{section.3}% 12
+\BOOKMARK [2][-]{subsection.3.3}{Discretizing Sample Data to Make Constructing the Bayes Network Easier}{section.3}% 13
+\BOOKMARK [1][-]{section.4}{Bayesian Network}{}% 14
+\BOOKMARK [2][-]{subsection.4.1}{Constructing the Network}{section.4}% 15
+\BOOKMARK [2][-]{subsection.4.2}{Probabilistic Inference}{section.4}% 16
+\BOOKMARK [1][-]{section.5}{Next Steps and Thoughts}{}% 17
+\BOOKMARK [2][-]{subsection.5.1}{A Representation of a Game Node}{section.5}% 18
+\BOOKMARK [2][-]{subsection.5.2}{"Cinderella" and "Fatigue" Factors}{section.5}% 19
+\BOOKMARK [2][-]{subsection.5.3}{Probabilistic Inference Techniques}{section.5}% 20
+\BOOKMARK [2][-]{subsection.5.4}{Learning Model}{section.5}% 21
+\BOOKMARK [1][-]{section.6}{References}{}% 22

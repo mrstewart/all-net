@@ -1,0 +1,68 @@
+\begin{thebibliography}{10}
+
+\bibitem{heckerman}
+D.~Heckerman, ``\somemagiccommand{A Tutorial on Learning With Bayesian
+  Networks},'' {\em Microsoft Research Advanced Technology Division Technical
+  Report}, March 1995.
+\newblock \url{http://tinyurl.com/lx7u8tt};Retrieved Mar. 2, 2014.
+
+\bibitem{wagner}
+S.~Wagner, ``\somemagiccommand{A Bayesian network approach to assess and
+  predict software quality using activity-based quality models},'' {\em
+  Proceedings of International Conference on Predictor Models in Software
+  Engineering}, vol.~5, no.~6, p.~9, 2009.
+\newblock DOI=10.1145/1540438.1540447\url{http://tinyurl.com/pgracp9}.
+
+\bibitem{tan}
+V.~K. Pang-Ning~Tang, Michael~Steinbach, {\em Introduction to Data Mining}.
+\newblock Addison-Wesley, 2005.
+
+\bibitem{weka}
+R.~R. Bouckaert, ``\somemagiccommand{Bayesian Network Classifiers in Weka for
+  Version 3-5-7},'' {\em Dept. of Computer Science at The University of
+  Waikato}, May 2008.
+\newblock \url{http://tinyurl.com/od8fu7r};Retrieved Mar. 2, 2014.
+
+\bibitem{mozell}
+J.~Mozell, ``\somemagiccommand{ Bracket Prediction: Highlighting Historical
+  Indicators of March Madness Success},'' {\em The Bleacher Report}, pp.~1--12,
+  2013.
+\newblock \url{http://tinyurl.com/p6bwyxh};Retrieved Feb. 20, 2014.
+
+\bibitem{sonas}
+J.~Sonas, ``\somemagiccommand{About the RPI Benchmark},'' {\em Kaggle.com},
+  2013.
+\newblock \url{http://tinyurl.com/nofpkgy};Retrieved March 6, 2014.
+
+\bibitem{crowson}
+C.~M, ``\somemagiccommand{Local Scoring},'' {\em Kaggle.com}, 2014.
+\newblock \url{http://tinyurl.com/pndjuew};Retrieved March 6, 2014.
+
+\bibitem{covalytics}
+Covalytics, ``\somemagiccommand{Upset Identification},'' {\em Kaggle.com},
+  2014.
+\newblock \url{http://tinyurl.com/otgty7z};Retrieved March 6, 2014.
+
+\bibitem{feschuk}
+D.~Feschuk, ``\somemagiccommand{Morey's Moneyball Approach Paying Off},'' {\em
+  The Star}, 2013.
+\newblock \url{http://tinyurl.com/pgw5sjv};Retrieved March 6, 2014.
+
+\bibitem{cobb}
+A.~S. Barry R.~Cobb, Rafael~Rumi, ``\somemagiccommand{Bayesian Network Models
+  with Discrete and Continuous Variables},'' tech. rep., Virginia Military
+  Institute Department of Statistics and Department of Applied Mathematics
+  University of Almeria, March 2014.
+\newblock \url{http://tinyurl.com/nx3ayda}.
+
+\bibitem{ruiz}
+C.~Ruiz, ``\somemagiccommand{Illustration of the K2 Algorithm for Learning
+  Bayes Net Structures},'' {\em Department of Computer Science, WPI}, March
+  2014.
+\newblock \url{http://tinyurl.com/kkcm765};Retrived Mar. 2, 2014.
+
+\bibitem{ben}
+F.~F. Fabrizio~Ruggeri, Ron~Kenett, {\em \somemagiccommand{Bayesian Networks in
+  Encyclopedia of Statistics in Quality and Reliability}}.
+
+\end{thebibliography}

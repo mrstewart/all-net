@@ -1,0 +1,4 @@
+python create_team_dictionary.py
+python create_team_vector_data.py
+python discretization.py
+python construct_season_bracket.py

@@ -1,6 +1,6 @@
-latex sigproc-sp
-bibtex sigproc-sp
-latex sigproc-sp
-latex sigproc-sp
-dvips sigproc-sp.dvi
-ps2pdf sigproc-sp.ps
+latex paper
+bibtex paper
+latex paper
+latex paper
+dvips paper.dvi
+ps2pdf paper.ps
