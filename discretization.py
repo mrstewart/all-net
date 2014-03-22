@@ -21,6 +21,7 @@ import matplotlib.patches as patches
 import matplotlib.path as path
 from constants import *
 
+
 def binValue(bins, value):
 	for i in range(len(bins) - 1):
 		if i < len(bins) - 2:
@@ -151,12 +152,11 @@ if os.path.exists(TEAMS_DATA_PATH):
 	# write team vector to file
 	for team in teams.keys():
 		if team in IGNORE_TEAMS: continue
-
+		
 		# Go through each bin and figure out what this team's value for this attribute
 		# falls in - use the bin's 0-indexed number as the discretized number
 		if EXPORT_RPI:
 			teams[team].ratingPercentageIndex = binValue(rpi_bins, teams[team].ratingPercentageIndex)
-				
 
 		# Go through each bin and figure out what this team's value for this attribute
 		# falls in - use the bin's 0-indexed number as the discretized number

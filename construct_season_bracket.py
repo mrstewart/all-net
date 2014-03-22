@@ -2,6 +2,9 @@ from classes import *
 from constants import *
 import pickle
 
+STANDARD_NUMBER_OF_GAMES = 63	# These should be different only if debugging
+NUMBER_OF_GAMES_TO_EXPORT = STANDARD_NUMBER_OF_GAMES	#
+
 def determineWinner(slot, tourneyResults):
 	for tourneyGame in tourneyResults:
 		if (tourneyGame.winningTeam == slot._highId or tourneyGame.losingTeam == slot._highId) and (tourneyGame.winningTeam == slot._lowId or tourneyGame.losingTeam == slot._lowId):
@@ -78,7 +81,7 @@ def generateRecord(rootNode, teams):
 		if curNode._lChild != None: queue.append(curNode._lChild)
 		if curNode._rChild != None: queue.append(curNode._rChild)
 		
-		if len(record) == 63: break
+		if len(record) == NUMBER_OF_GAMES_TO_EXPORT: break
 
 	return record
 teams = pickle.load( open( "teams.p", "rb" ) )
@@ -169,16 +172,29 @@ bracketRecord = generateRecord(season_championship_nodes["A"],teams)
 # Create header
 headerStr = ""
 for bracket in range(len(bracketRecord) - 1):
-	headerStr += bracketRecord[bracket]._name + "_RPI,"
-	headerStr += bracketRecord[bracket]._name + "_PYTH,"
-	headerStr += bracketRecord[bracket]._name + "_CWG,"
-	headerStr += bracketRecord[bracket]._name + "_AVG,"
-	
+	headerStr += bracketRecord[bracket]._name + "_RPI0,"
+	headerStr += bracketRecord[bracket]._name + "_PYTH0,"
+	headerStr += bracketRecord[bracket]._name + "_CWG0,"
+	headerStr += bracketRecord[bracket]._name + "_AVG0,"
 
-headerStr += bracketRecord[len(bracketRecord) - 1]._name + "_RPI,"
-headerStr += bracketRecord[len(bracketRecord) - 1]._name + "_PYTH,"
-headerStr += bracketRecord[len(bracketRecord) - 1]._name + "_CWG,"
-headerStr += bracketRecord[len(bracketRecord) - 1]._name + "_AVG\n"
+	headerStr += bracketRecord[bracket]._name + "_RPI1,"
+	headerStr += bracketRecord[bracket]._name + "_PYTH1,"
+	headerStr += bracketRecord[bracket]._name + "_CWG1,"
+	headerStr += bracketRecord[bracket]._name + "_AVG1,"
+	headerStr += bracketRecord[bracket]._name + "_W,"
+
+	
+headerStr += bracketRecord[len(bracketRecord) - 1]._name + "_RPI0,"
+headerStr += bracketRecord[len(bracketRecord) - 1]._name + "_PYTH0,"
+headerStr += bracketRecord[len(bracketRecord) - 1]._name + "_CWG0,"
+headerStr += bracketRecord[len(bracketRecord) - 1]._name + "_AVG0,"
+
+headerStr += bracketRecord[len(bracketRecord) - 1]._name + "_RPI1,"
+headerStr += bracketRecord[len(bracketRecord) - 1]._name + "_PYTH1,"
+headerStr += bracketRecord[len(bracketRecord) - 1]._name + "_CWG1,"
+headerStr += bracketRecord[len(bracketRecord) - 1]._name + "_AVG1,"
+
+headerStr += bracketRecord[len(bracketRecord) - 1]._name + "_W\n"
 
 training_data.write(headerStr)
 
@@ -187,24 +203,50 @@ for season in SEASONS_TO_PICK_FROM:
 	bracketRecordRaw = ""
 
 	for bracket in range(len(bracketRecord) - 1):
-		team = teams[bracketRecord[bracket]._winnerId]
+		winnerId = bracketRecord[bracket]._winnerId
+		low = teams[bracketRecord[bracket]._lowId]
+		high = teams[bracketRecord[bracket]._highId]
+		bracketName = bracketRecord[bracket]._name
 
-		rpi = str(team.ratingPercentageIndex)
-		pyth = str(team.pythagoreanExpectation)
-		cwg = str(team.closeWonGames)
-		avg = str(team.averageMarginOfVictory)
+		# ?
+		winBit = "h" if bracketRecord[bracket]._highId == winnerId else "l"
 
-		bracketRecordRaw += rpi + "," + pyth + "," + cwg + "," + avg + ","
+		rpi0 = str(high.ratingPercentageIndex)
+		pyth0 = str(high.pythagoreanExpectation)
+		cwg0 = str(high.closeWonGames)
+		avg0 = str(high.averageMarginOfVictory)
+
+		rpi1 = str(low.ratingPercentageIndex)
+		pyth1 = str(low.pythagoreanExpectation)
+		cwg1 = str(low.closeWonGames)
+		avg1 = str(low.averageMarginOfVictory)
+
+		bracketRecordRaw += rpi0 + "," + pyth0 + "," + cwg0 + "," + avg0 + ","
+		bracketRecordRaw += rpi1 + "," + pyth1 + "," + cwg1 + "," + avg1 + ","
+		bracketRecordRaw += bracketName + "_" + winBit + ","
 	
+	winnerId = bracketRecord[len(bracketRecord) - 1]._winnerId
+	low = teams[bracketRecord[len(bracketRecord) - 1]._lowId]
+	high = teams[bracketRecord[len(bracketRecord) - 1]._highId]
+	bracketName = bracketRecord[len(bracketRecord) - 1]._name
+
+	# ?
+	winBit = "h" if bracketRecord[len(bracketRecord) - 1]._highId == winnerId else "l"
+
+	rpi0 = str(high.ratingPercentageIndex)
+	pyth0 = str(high.pythagoreanExpectation)
+	cwg0 = str(high.closeWonGames)
+	avg0 = str(high.averageMarginOfVictory)
+
+	rpi1 = str(low.ratingPercentageIndex)
+	pyth1 = str(low.pythagoreanExpectation)
+	cwg1 = str(low.closeWonGames)
+	avg1 = str(low.averageMarginOfVictory)
+
+	bracketRecordRaw += rpi0 + "," + pyth0 + "," + cwg0 + "," + avg0 + ","
+	bracketRecordRaw += rpi1 + "," + pyth1 + "," + cwg1 + "," + avg1 + ","
+	bracketRecordRaw += bracketName + "_" + winBit + "\n"
 	
-	team = teams[bracketRecord[len(bracketRecord) - 1]._winnerId]
-
-	rpi = str(team.ratingPercentageIndex)
-	pyth = str(team.pythagoreanExpectation)
-	cwg = str(team.closeWonGames)
-	avg = str(team.averageMarginOfVictory)
-
-	bracketRecordRaw += rpi + "," + pyth + "," + cwg + "," + avg + "\n"
 	training_data.write(bracketRecordRaw)
 
 training_data.close()
