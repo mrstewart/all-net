@@ -28,15 +28,6 @@ def binValue(bins, value):
 def discretize(data, bins):
 	return np.histogram(data, bins)
 
-RPI_BINS = 60
-WP_BINS = 30
-PYTH_BINS = 512
-CG_BINS = 60
-TPF_BINS = 30
-TPA_BINS = 30
-NV_BINS = 30
-NL_BINS = 30
-AVGMV_BINS = 60
 TESTING_BINS = True
 
 EXPORT_WITH_HEADINGS = True

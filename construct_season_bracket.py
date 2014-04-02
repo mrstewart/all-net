@@ -84,6 +84,66 @@ def generateRecord(rootNode, teams):
 		if len(record) == NUMBER_OF_GAMES_TO_EXPORT: break
 
 	return record
+
+def createArffValueEnumeration(numberOfValues):
+	values = "{"
+	for i in range(numberOfValues - 1):
+		values += str(i) + ","
+	values += str(numberOfValues - 1) + "}"
+
+	return values
+def writeHeader(training_data):
+	training_data.write("@relation training_data\n")
+	
+	rpiBinValues = createArffValueEnumeration(RPI_BINS)
+	pythBinValues = createArffValueEnumeration(PYTH_BINS)
+	cwgBinValues = createArffValueEnumeration(CG_BINS)
+	avgBinValues = createArffValueEnumeration(AVGMV_BINS)
+
+	training_data.write("@attribute RPI0 " + rpiBinValues +"\n")
+	training_data.write("@attribute PYTH0 " + pythBinValues + "\n")
+	training_data.write("@attribute CWG0 " + cwgBinValues + "\n")
+	training_data.write("@attribute AVG0 " + avgBinValues + "\n")
+	training_data.write("@attribute RPI1 " + rpiBinValues +"\n")
+	training_data.write("@attribute PYTH1 " + pythBinValues + "\n")
+	training_data.write("@attribute CWG1 " + cwgBinValues + "\n")
+	training_data.write("@attribute AVG1 " + avgBinValues + "\n")
+	training_data.write("@attribute W {HIGH_SEED, LOW_SEED}\n")
+
+def writeOutData(training_data, season_championship_nodes, teams):
+	training_data.write("@data\n")
+	for season in SEASONS_TO_PICK_FROM:
+		bracketRecord = generateRecord(season_championship_nodes[season],teams)
+
+		# In WEKA, for the K2 algorithm, nodes to be in such an order that all a nodes
+		# parents are to its 'left'. The raw bracket record comes out such that the
+		# championship round is at the leftmost spot, but we want it at the rightmost spot
+		bracketRecord.reverse()
+
+
+
+		for bracket in range(len(bracketRecord)):
+			bracketRecordRaw = ""
+			winnerId = bracketRecord[bracket]._winnerId
+			low = teams[bracketRecord[bracket]._lowId]
+			high = teams[bracketRecord[bracket]._highId]
+
+			winBit = "HIGH_SEED" if bracketRecord[bracket]._highId == winnerId else "LOW_SEED"
+
+			rpi0 = str(high.ratingPercentageIndex)
+			pyth0 = str(high.pythagoreanExpectation)
+			cwg0 = str(high.closeWonGames)
+			avg0 = str(high.averageMarginOfVictory)
+
+			rpi1 = str(low.ratingPercentageIndex)
+			pyth1 = str(low.pythagoreanExpectation)
+			cwg1 = str(low.closeWonGames)
+			avg1 = str(low.averageMarginOfVictory)
+
+			training_data.write(rpi0 + "," + pyth0 + "," + cwg0 + "," + avg0 + ",")
+			training_data.write(rpi1 + "," + pyth1 + "," + cwg1 + "," + avg1 + ",")
+			training_data.write(winBit + "\n")
+
 teams = pickle.load( open( "teams.p", "rb" ) )
 tourney_slots = open('contest_data/tourney_slots.csv', "rt")
 header = True
@@ -165,97 +225,10 @@ for season in tourney_results.keys():
 for season in season_championship_nodes.keys():
 	team = teams[fillOutBracket(season_championship_nodes[season], tourney_results[season])].name
 
-training_data = open('training_data.csv', 'w')
+training_data = open('training_data.arff', 'w')
 
-bracketRecord = generateRecord(season_championship_nodes["A"],teams)
-
-bracketRecord.reverse()
-# Create header
-headerStr = ""
-for bracket in range(len(bracketRecord) - 1):
-	headerStr += bracketRecord[bracket]._name + "_RPI0,"
-	headerStr += bracketRecord[bracket]._name + "_PYTH0,"
-	headerStr += bracketRecord[bracket]._name + "_CWG0,"
-	headerStr += bracketRecord[bracket]._name + "_AVG0,"
-
-	headerStr += bracketRecord[bracket]._name + "_RPI1,"
-	headerStr += bracketRecord[bracket]._name + "_PYTH1,"
-	headerStr += bracketRecord[bracket]._name + "_CWG1,"
-	headerStr += bracketRecord[bracket]._name + "_AVG1,"
-	headerStr += bracketRecord[bracket]._name + "_W,"
-
-	
-headerStr += bracketRecord[len(bracketRecord) - 1]._name + "_RPI0,"
-headerStr += bracketRecord[len(bracketRecord) - 1]._name + "_PYTH0,"
-headerStr += bracketRecord[len(bracketRecord) - 1]._name + "_CWG0,"
-headerStr += bracketRecord[len(bracketRecord) - 1]._name + "_AVG0,"
-
-headerStr += bracketRecord[len(bracketRecord) - 1]._name + "_RPI1,"
-headerStr += bracketRecord[len(bracketRecord) - 1]._name + "_PYTH1,"
-headerStr += bracketRecord[len(bracketRecord) - 1]._name + "_CWG1,"
-headerStr += bracketRecord[len(bracketRecord) - 1]._name + "_AVG1,"
-headerStr += bracketRecord[len(bracketRecord) - 1]._name + "_W\n"
-
-
-training_data.write(headerStr)
-
-for season in SEASONS_TO_PICK_FROM:
-	bracketRecord = generateRecord(season_championship_nodes[season],teams)
-
-	# In WEKA, for the K2 algorithm, nodes to be in such an order that all a nodes
-	# parents are to its 'left'. The raw bracket record comes out such that the
-	# championship round is at the leftmost spot, but we want it at the rightmost spot
-	bracketRecord.reverse()
-
-
-	bracketRecordRaw = ""
-
-	for bracket in range(len(bracketRecord) - 1):
-		winnerId = bracketRecord[bracket]._winnerId
-		low = teams[bracketRecord[bracket]._lowId]
-		high = teams[bracketRecord[bracket]._highId]
-		bracketName = bracketRecord[bracket]._name
-
-		# ?
-		winBit = "h" if bracketRecord[bracket]._highId == winnerId else "l"
-
-		rpi0 = str(high.ratingPercentageIndex)
-		pyth0 = str(high.pythagoreanExpectation)
-		cwg0 = str(high.closeWonGames)
-		avg0 = str(high.averageMarginOfVictory)
-
-		rpi1 = str(low.ratingPercentageIndex)
-		pyth1 = str(low.pythagoreanExpectation)
-		cwg1 = str(low.closeWonGames)
-		avg1 = str(low.averageMarginOfVictory)
-
-		bracketRecordRaw += rpi0 + "," + pyth0 + "," + cwg0 + "," + avg0 + ","
-		bracketRecordRaw += rpi1 + "," + pyth1 + "," + cwg1 + "," + avg1 + ","
-		bracketRecordRaw += bracketName + "_" + winBit + ","
-	
-	winnerId = bracketRecord[len(bracketRecord) - 1]._winnerId
-	low = teams[bracketRecord[len(bracketRecord) - 1]._lowId]
-	high = teams[bracketRecord[len(bracketRecord) - 1]._highId]
-	bracketName = bracketRecord[len(bracketRecord) - 1]._name
-
-	# ?
-	winBit = "h" if bracketRecord[len(bracketRecord) - 1]._highId == winnerId else "l"
-
-	rpi0 = str(high.ratingPercentageIndex)
-	pyth0 = str(high.pythagoreanExpectation)
-	cwg0 = str(high.closeWonGames)
-	avg0 = str(high.averageMarginOfVictory)
-
-	rpi1 = str(low.ratingPercentageIndex)
-	pyth1 = str(low.pythagoreanExpectation)
-	cwg1 = str(low.closeWonGames)
-	avg1 = str(low.averageMarginOfVictory)
-
-	bracketRecordRaw += rpi0 + "," + pyth0 + "," + cwg0 + "," + avg0 + ","
-	bracketRecordRaw += rpi1 + "," + pyth1 + "," + cwg1 + "," + avg1 + ","
-	bracketRecordRaw += bracketName + "_" + winBit + "\n"
-	
-	training_data.write(bracketRecordRaw)
+writeHeader(training_data)
+writeOutData(training_data, season_championship_nodes, teams)
 
 training_data.close()
 
