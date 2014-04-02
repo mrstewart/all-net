@@ -169,6 +169,7 @@ training_data = open('training_data.csv', 'w')
 
 bracketRecord = generateRecord(season_championship_nodes["A"],teams)
 
+bracketRecord.reverse()
 # Create header
 headerStr = ""
 for bracket in range(len(bracketRecord) - 1):
@@ -193,13 +194,20 @@ headerStr += bracketRecord[len(bracketRecord) - 1]._name + "_RPI1,"
 headerStr += bracketRecord[len(bracketRecord) - 1]._name + "_PYTH1,"
 headerStr += bracketRecord[len(bracketRecord) - 1]._name + "_CWG1,"
 headerStr += bracketRecord[len(bracketRecord) - 1]._name + "_AVG1,"
-
 headerStr += bracketRecord[len(bracketRecord) - 1]._name + "_W\n"
+
 
 training_data.write(headerStr)
 
 for season in SEASONS_TO_PICK_FROM:
 	bracketRecord = generateRecord(season_championship_nodes[season],teams)
+
+	# In WEKA, for the K2 algorithm, nodes to be in such an order that all a nodes
+	# parents are to its 'left'. The raw bracket record comes out such that the
+	# championship round is at the leftmost spot, but we want it at the rightmost spot
+	bracketRecord.reverse()
+
+
 	bracketRecordRaw = ""
 
 	for bracket in range(len(bracketRecord) - 1):
