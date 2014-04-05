@@ -15,7 +15,6 @@ import matplotlib.patches as patches
 import matplotlib.path as path
 from constants import *
 
-
 def binValue(bins, value):
 	for i in range(len(bins) - 1):
 		if i < len(bins) - 2:
@@ -24,26 +23,8 @@ def binValue(bins, value):
 		else:
 			return i
 
-
 def discretize(data, bins):
 	return np.histogram(data, bins)
-
-TESTING_BINS = True
-
-EXPORT_WITH_HEADINGS = True
-EXPORT_ID = True
-EXPORT_NAME = False
-EXPORT_RPI = True
-EXPORT_WP = True
-EXPORT_PYTH = True
-EXPORT_CWG = True
-EXPORT_TPF = True
-EXPORT_TPA = True
-EXPORT_NV = True
-EXPORT_NL = True
-EXPORT_AVGMV = True
-
-TEAMS_DATA_PATH = "teams.p"
 
 if os.path.exists(TEAMS_DATA_PATH):
 	teams = pickle.load( open( TEAMS_DATA_PATH, "rb" ) )
@@ -72,44 +53,35 @@ if os.path.exists(TEAMS_DATA_PATH):
 
 	# histogram our data with numpy
 	rpi_frequency, rpi_bins = discretize(rpi_data, RPI_BINS)
-	#if TESTING_BINS: testDiscretization(rpi_frequency, rpi_bins)
 
 	# histogram our data with numpy
 	wp_frequency, wp_bins = discretize(wp_data, WP_BINS)
-	#if TESTING_BINS: testDiscretization(wp_frequency, wp_bins)
 	
 	# histogram our data with numpy
 	pyth_frequency, pyth_bins = discretize(pyth_data, PYTH_BINS)
-	#if TESTING_BINS: testDiscretization(pyth_frequency, pyth_bins)
 
 	# histogram our data with numpy
 	cg_frequency, cg_bins = discretize(cg_data, CG_BINS)
-	#if TESTING_BINS: testDiscretization(cg_frequency, cg_bins)
 
 	# histogram our data with numpy
 	tpf_frequency, tpf_bins = discretize(tpf_data, TPF_BINS)
-	#if TESTING_BINS: testDiscretization(tpf_frequency, tpf_bins)
 
 	# histogram our data with numpy
 	tpa_frequency, tpa_bins = discretize(tpa_data, TPA_BINS)
-	#if TESTING_BINS: testDiscretization(tpa_frequency, tpa_bins)
 
 	# histogram our data with numpy
-	nv_frequency, nv_bins = discretize(nv_data, NV_BINS)
-	#if TESTING_BINS: testDiscretization(nv_frequency, nv_bins)	
+	nv_frequency, nv_bins = discretize(nv_data, NV_BINS)	
 
 	# histogram our data with numpy
 	nl_frequency, nl_bins = discretize(nl_data, NL_BINS)
-	#if TESTING_BINS: testDiscretization(nl_frequency, nl_bins)
 
 	# histogram our data with numpy
 	avgMV_frequency, avgMV_bins = discretize(avgMV_data, AVGMV_BINS)
-	#if TESTING_BINS: testDiscretization(avgMV_frequency, avgMV_bins)
 
 	# Convert winning percentage for each team to an ordinal value
 	# write team vector to file
 	for team in teams.keys():
-		if team in IGNORE_TEAMS: continue
+		#if team in IGNORE_TEAMS: continue
 		
 		# Go through each bin and figure out what this team's value for this attribute
 		# falls in - use the bin's 0-indexed number as the discretized number
@@ -163,9 +135,9 @@ if os.path.exists(TEAMS_DATA_PATH):
 				
 
 # Delete original file
-os.remove("teams.p")
+os.remove(TEAMS_DATA_PATH)
 
 # Write teams to that file
-pickle.dump(teams, open( "teams.p", "wb" ) )
+pickle.dump(teams, open( TEAMS_DATA_PATH, "wb" ) )
 
 	

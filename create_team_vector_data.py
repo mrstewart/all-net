@@ -3,31 +3,12 @@
 
 import pickle
 import os
-import matplotlib.pyplot as plt
-
 import math
 from team import *
-#from stats import *
 from classes import *
 from constants import *
 
-REGULAR_SEASON_FILENAME = "regular_season_results"
-
-MAX_CLOSE_GAME_MV = 7 	# The maximum margin of victory for a close game. 
-		 	# Equivalent to: 
-			# 	2 3-point shots and a foul shot
-			#	3 2-point shots and a foul shot
-			#	2 2-point shots and a 3-point shot
-
-def generateOpponentList(season, teams):
-	for entry in season:
-		winningTeamId = entry[2]
-		losingTeamId = entry[4]
-
-		teams[winningTeamId].opponentList.append(losingTeamId)
-		teams[losingTeamId].opponentList.append(winningTeamId)
-
-teams = pickle.load( open( "teams.p", "rb" ) )
+teams = pickle.load( open( TEAMS_DATA_PATH, "rb" ) )
 
 # Calculate statistics based on selected seasons
 for season in SEASONS_TO_PICK_FROM:
@@ -68,9 +49,11 @@ for season in SEASONS_TO_PICK_FROM:
 
 # Calculate averages across seasons
 for team in teams:
-	if team in IGNORE_TEAMS: continue
+	#if team in IGNORE_TEAMS: continue
 	# Games Played
 	gamesPlayed = teams[team].numVictories + teams[team].numberOfLosses 
+	
+	if gamesPlayed == 0: continue
 
 	# Average margin of victory
 	teams[team].averageMarginOfVictory /= gamesPlayed
@@ -91,10 +74,12 @@ for team in teams:
 # Calculate Rating Percentage Index and Pythagorean Expectation, which depend 
 # on the above calculations
 for team in teams:
-	if team in IGNORE_TEAMS: continue
+	#if team in IGNORE_TEAMS: continue
 	# Pythagorean Expectation
 	peNumerator = pow(teams[team].totalPointsFor, 13.91)
 	peDenominator = pow(teams[team].totalPointsFor, 13.91) + pow(teams[team].totalPointsAgainst, 13.91)
+	
+	if peDenominator == 0: continue
 
 	teams[team].pythagoreanExpectation =  peNumerator / peDenominator
 
@@ -122,8 +107,8 @@ for team in teams:
 		teams[team].ratingPercentageIndex = "NA" 
 
 # Delete original file
-os.remove("teams.p")
+os.remove(TEAMS_DATA_PATH)
 
 # Write teams to that file
-pickle.dump(teams, open( "teams.p", "wb" ) )
+pickle.dump(teams, open( TEAMS_DATA_PATH, "wb" ) )
 

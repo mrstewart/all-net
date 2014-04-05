@@ -1,6 +1,5 @@
 class Season:
 	_slots = []
-
 	def __init__(self):
 		self._slots = slots
 
@@ -72,6 +71,10 @@ class TourneySlot:
 		return str(self.slot) + " " + str(self.strongseed) + " " + str(self.weakseed)
 
 
+# Represents a Team in the data
+#
+# Central point of collection for a team including all statistical indices
+# to be calculated
 class Team:
 	# Id of the team
 	idNum = 0 		
@@ -94,26 +97,20 @@ class Team:
 	# Calculate Win % Close games
 	closeWonGames = 0.0
 
-	# Calculate total points for a season 
-	# (Points Per Game, Pythagorean Expectation)
+	# Calculate total points for a season
 	totalPointsFor = 0.0
 
 	# Calculate total points against in a season
-	# (Pythogorean Expectation)
 	totalPointsAgainst = 0.0
 
 	# Calculate total wins in a season
-	# (Rating Percentage Index, Margin of Victory, Points Per Game, Winning Percentage)
 	numVictories = 0.0
 
 	# Calculate total losses in a season
-	# (Rating Percentage Index, Margin of Victory, Points Per Game, Winning Percentage)
 	numberOfLosses = 0.0
 
 	# Average of all margins of victory
 	averageMarginOfVictory = 0.0
-
-
 
 	def __init__(self, name, idNum):
 		self.name = name
