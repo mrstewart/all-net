@@ -8,7 +8,24 @@ from team import *
 from classes import *
 from constants import *
 
-teams = pickle.load( open( TEAMS_DATA_PATH, "rb" ) )
+
+# Read in team data
+teams = {}
+
+teams_csv_file = open(TEAMS_FILE, "rt")
+
+header = True
+while True:
+	line = teams_csv_file.readline()
+	if not line:
+		break
+	if not header:
+		record = line.split(',')	
+		teamName = record[1].replace("\r\n","")	
+		teamId = int(record[0])
+		teams[teamId] = Team(teamName, teamId)
+	else: header = False
+teams_csv_file.close()
 
 # Calculate statistics based on selected seasons
 for season in SEASONS_TO_PICK_FROM:

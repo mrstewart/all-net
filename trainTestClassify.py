@@ -1,5 +1,6 @@
 from classes import *
 from constants import *
+from subprocess import call
 import pickle
 import subprocess
 import sys
@@ -226,7 +227,7 @@ def writeOutData(season_championship_nodes, teams, creatingTestData, creatingTra
 
 
 
-creatingTrainingData = True if sys.argv[1] == 'training' else False
+creatingTrainingData = True if sys.argv[1] == 'train' else False
 creatingTestData = True if sys.argv[1] == 'test' else False
 classifyingData = True if sys.argv[1] == 'classify' else False
 
@@ -319,8 +320,13 @@ for season in SEASONS_TO_PICK_FROM:
 		team = teams[fillOutBracket(season_championship_nodes[season], teams, tourney_results[season], True)].name
 	else:
 		team = teams[fillOutBracket(season_championship_nodes[season], teams, None, False)].name
-	print season + " " + team
+	if classifyingData: print season + " " + team
 
 if not classifyingData:
 	writeOutData(season_championship_nodes, teams, creatingTestData, creatingTrainingData)
+	if creatingTrainingData: call(["java","-Xmx1024m","weka.classifiers.bayes.BayesNet","-t","training_data.arff","-d","round_model.model","-D","-Q","weka.classifiers.bayes.net.search.local.K2","--","-P","8","-S","BAYES","-E","weka.classifiers.bayes.net.estimate.SimpleEstimator","--","-A","0.5"])
+	else: call(["java","-Xmx1024m","weka.classifiers.bayes.BayesNet","-T","test_data.arff","-l","round_model.model","-p","0"])
+
+
+
 
